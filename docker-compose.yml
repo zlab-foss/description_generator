@@ -14,6 +14,8 @@ services:
       dockerfile: Dockerfile
     container_name: description_generator
     restart: on-failure
+    environment:
+      - "ES_ENDPOINT=http://elastic:changeme@elastic:9200"
     ports:
       - 8001:8001
     networks:

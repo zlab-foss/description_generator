@@ -1,5 +1,6 @@
 import time
 import json
+import os
 
 from elasticsearch import Elasticsearch
 
@@ -9,7 +10,8 @@ from src.adapter import get_attribute_id
 
 models.Base.metadata.create_all(bind=engine)
 
-es = Elasticsearch("elasticsearch:9200",basic_auth=("elastic", "changeme"))
+#es = Elasticsearch(hosts=["elasticsearch:9200"],http_auth=("elastic", "changeme"))
+es = Elasticsearch(os.environ['ES_ENDPOINT'])
 session = SessionLocal()
 
 
