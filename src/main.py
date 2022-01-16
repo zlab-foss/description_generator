@@ -10,8 +10,8 @@ from src.adapter import get_attribute_id
 
 models.Base.metadata.create_all(bind=engine)
 
-#es = Elasticsearch(hosts=["elasticsearch:9200"],http_auth=("elastic", "changeme"))
-es = Elasticsearch(os.environ['ES_ENDPOINT'])
+es = Elasticsearch(hosts=["elasticsearch:9200"],http_auth=("elastic", "changeme"))
+
 session = SessionLocal()
 
 
