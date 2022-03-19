@@ -1,10 +1,9 @@
 import time
 import json
-import os
 
 from elasticsearch import Elasticsearch
 
-from src import crud, models
+from src import crud, models, preprocess
 from src.database import SessionLocal, engine
 from src.adapter import get_attribute_id
 
@@ -17,7 +16,7 @@ session = SessionLocal()
 
 init_id = 1
 
-while(init_id<10000):
+while(init_id<348817):
     products = crud.get_product(session, init_id)
     if products:
         product_obj = products.__dict__
@@ -33,6 +32,7 @@ while(init_id<10000):
                 "id": product_obj['id'],
                 "name": product_obj['name'],
                 "description": product_obj['description'],
+                "preprocessed_description":  preprocess.preprocess(product_obj['description']),
                 'attribute_description': str(".".join(attribute_string))
             }
             res = es.index(index="lexical-search-index", body=document_obj)
