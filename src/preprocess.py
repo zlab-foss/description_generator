@@ -1,10 +1,7 @@
 import re
 import string
-import hazm
 
 from collections import Counter
-
-_normalizer = hazm.Normalizer()
 
 def _multiple_replace(mapping, text):
     pattern = "|".join(map(re.escape, mapping.keys()))
@@ -59,7 +56,6 @@ def convert_special_characters(input_str):
 def preprocess(text):
     text = text.lower().strip()
     removelist = "."
-    text = _normalizer.normalize(text)
     text = re.sub(r'[^\w'+removelist+']', ' ', text)
     text = re.sub(r'[ـ_]', ' ', text)
     text = re.sub(r'[ؤ إ أة ك ء]',' ',text)
