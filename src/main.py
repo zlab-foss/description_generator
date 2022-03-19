@@ -16,7 +16,12 @@ session = SessionLocal()
 
 init_id = 1
 
-while(init_id<348817):
+
+log = crud.get_last_log(session)
+
+print(f"""$$$ LAST LOG: {log.__dict__['product_id']} $$$""")
+
+while(init_id<int(log.__dict__['product_id'])):
     products = crud.get_product(session, init_id)
     if products:
         product_obj = products.__dict__
@@ -28,11 +33,16 @@ while(init_id<348817):
                     " " + 
                     str(json.loads(attr)['value']).encode().decode('utf-8')
                 )
+            preprocessed_description = (
+                preprocess.preprocess(product_obj['description']) if \
+                product_obj['description'] else None
+            )
+            
             document_obj = {
                 "id": product_obj['id'],
                 "name": product_obj['name'],
                 "description": product_obj['description'],
-                "preprocessed_description":  preprocess.preprocess(product_obj['description']),
+                "preprocessed_description": preprocessed_description ,
                 'attribute_description': str(".".join(attribute_string))
             }
             res = es.index(index="lexical-search-index", body=document_obj)
