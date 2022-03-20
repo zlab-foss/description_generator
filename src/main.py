@@ -15,7 +15,24 @@ es = Elasticsearch(hosts=["elasticsearch:9200"],http_auth=("elastic", "changeme"
 session = SessionLocal()
 
 
-init_id = 1
+try:
+    phrase = {
+        "query": {
+            "match_all": {}
+            },
+            "sort": [
+                {
+                    "timestamp": {
+                        "order": "desc"
+                    }
+                }
+            ]
+        }
+
+    resp = es.search(index="lexical-search-index", size=1, body=phrase)
+    init_id = int(resp['hits']['hits'][0]['_source']['id'])
+except:
+    init_id = 1
 
 
 log = crud.get_last_log(session)
