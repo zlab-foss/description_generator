@@ -2,6 +2,7 @@ import time
 import json
 
 from elasticsearch import Elasticsearch
+from datetime import datetime
 
 from src import crud, models, preprocess
 from src.database import SessionLocal, engine
@@ -43,14 +44,14 @@ while(init_id<int(log.__dict__['product_id'])):
                 "name": product_obj['name'],
                 "description": product_obj['description'],
                 "preprocessed_description": preprocessed_description ,
-                'attribute_description': str(".".join(attribute_string))
+                "attribute_description": str(".".join(attribute_string)),
+                "timestamp": datetime.utcnow()
             }
             res = es.index(index="lexical-search-index", body=document_obj)
             print(f'****res:{res}')
             init_id = init_id + 1
+            time.sleep(1)
         else:
             init_id = init_id + 1
-            time.sleep(1)
     else:
         init_id = init_id + 1
-        time.sleep(1)
